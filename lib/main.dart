@@ -28,25 +28,7 @@ class MyApp extends StatelessWidget {
             ),
           )),
       onGenerateRoute: (settings) => generarRoute(settings),
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Amazon Clone'),
-        ),
-        body: Column(
-          children: [
-            const Center(
-              child: Text('AMAZON'),
-            ),
-            Builder(builder: (context) {
-              return ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, AuthScreens.routeName);
-                  },
-                  child: const Text('Click'));
-            })
-          ],
-        ),
-      ),
+      home: const AuthScreens(),
     );
   }
 }
