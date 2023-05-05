@@ -1,6 +1,7 @@
 import 'package:amazon_clone/common/witgets/custom_btn.dart';
 import 'package:amazon_clone/common/witgets/custom_text.dart';
 import 'package:amazon_clone/constants/global_variables.dart';
+import 'package:amazon_clone/features/auth/services/auth_service.dart';
 import 'package:flutter/material.dart';
 
 enum Auth {
@@ -20,6 +21,7 @@ class _AuthScreensState extends State<AuthScreens> {
   Auth _auth = Auth.signin;
   final _signUpFormKey = GlobalKey<FormState>();
   final _signInFormKey = GlobalKey<FormState>();
+  final AuthService authService = AuthService();
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -31,6 +33,15 @@ class _AuthScreensState extends State<AuthScreens> {
     _emailController.dispose();
     _passwordController.dispose();
     _nameController.dispose();
+  }
+
+  void siginUpUser() {
+    authService.signUpUser(
+      context: context,
+      email: _emailController.text,
+      password: _passwordController.text,
+      name: _nameController.text,
+    );
   }
 
   @override
@@ -100,7 +111,14 @@ class _AuthScreensState extends State<AuthScreens> {
                         const SizedBox(
                           height: 10,
                         ),
-                        CustomBtn(txt: 'Crear', onTap: () {})
+                        CustomBtn(
+                          txt: 'Crear',
+                          onTap: () {
+                            if (_signUpFormKey.currentState!.validate()) {
+                              siginUpUser();
+                            }
+                          },
+                        )
                       ],
                     ),
                   ),
@@ -131,7 +149,7 @@ class _AuthScreensState extends State<AuthScreens> {
                   padding: const EdgeInsets.all(8),
                   color: GlobalVariables.backgroundColor,
                   child: Form(
-                    key: _signUpFormKey,
+                    key: _signInFormKey,
                     child: Column(
                       children: [
                         CustomText(
