@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
+  //crear_User
   void signUpUser({
     required BuildContext context,
     required String email,
@@ -53,6 +54,7 @@ class AuthService {
     }
   }
 
+  //Login User
   void signInUser({
     required BuildContext context,
     required String email,
@@ -64,8 +66,6 @@ class AuthService {
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           });
-
-      print(res.body);
 
       httpErrHandler(
         response: res,
@@ -81,6 +81,44 @@ class AuthService {
           );
         },
       );
+    } catch (e) {
+      showSnackBar(
+        context,
+        e.toString(),
+      );
+    }
+  }
+
+  //get Token & user Data
+  void getUserData(BuildContext context) async {
+    try {
+      SharedPreferences prefer = await SharedPreferences.getInstance();
+      String? token = prefer.getString('x-auth-token');
+
+      if (token == null) {
+        prefer.setString('x-auth-token', '');
+      }
+
+      var tokenRes = await http.post(
+        Uri.parse('$uri/tokenIsValid'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': token!
+        },
+      );
+
+      var response = jsonDecode(tokenRes.body);
+
+      if (response == true) {
+        http.Response userResponse = await http.get(Uri.parse('$uri/'),
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
+              'x-auth-token': token
+            });
+
+        var userProvider = Provider.of<UserProvider>(context, listen: false);
+        userProvider.setUser(userResponse.body);
+      }
     } catch (e) {
       showSnackBar(
         context,
