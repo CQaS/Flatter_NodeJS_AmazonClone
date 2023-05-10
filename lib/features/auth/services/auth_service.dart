@@ -1,9 +1,9 @@
 import 'dart:convert';
 
+import 'package:amazon_clone/common/witgets/botton_bar.dart';
 import 'package:amazon_clone/constants/err_handler.dart';
 import 'package:amazon_clone/constants/global_variables.dart';
 import 'package:amazon_clone/constants/utils.dart';
-import 'package:amazon_clone/features/home/screens/home_screen.dart';
 import 'package:amazon_clone/models/user.dart';
 import 'package:amazon_clone/provider/user_provider.dart';
 import 'package:flutter/material.dart';
@@ -76,7 +76,7 @@ class AuthService {
           await prefer.setString('x-auth-token', jsonDecode(res.body)['token']);
           Navigator.pushNamedAndRemoveUntil(
             context,
-            HomeScreen.routeName,
+            BottonBar.routeName,
             (route) => false,
           );
         },
